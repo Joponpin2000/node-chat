@@ -2,7 +2,6 @@ const express = require('express');
 const socketio = require('socket.io');
 const http = require('http');
 const cors = require('cors');
-// const connectDB = require('./database');
 const messageController = require('./controllers/message');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
 
@@ -24,12 +23,6 @@ io.on('connection', (socket) => {
 
         if (error) return callback(error);
 
-        // prevMessages = await messageController.readAll(room);
-        // if (prevMessages !== [] && prevMessages !== undefined) {
-        //     prevMessages.map(mes => {
-        //         socket.emit('message', { user: mes.sender, text: mes.text });
-        //     });
-        // }
         socket.emit('message', { user: 'admin', text: `${user.name}, welcome to the ${user.room} room` });
         socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name}, has joined` });
 
@@ -78,6 +71,5 @@ io.on('connection', (socket) => {
     });
 });
 
-// connectDB();
 
 server.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
